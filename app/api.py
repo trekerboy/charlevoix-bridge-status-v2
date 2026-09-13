@@ -534,6 +534,47 @@ def make_request_handler(daemon: APIDaemon):
                     self.wfile.write(body)
                 return
 
+            # 4. Static web assets fallback
+            web_dir = (Path(__file__).resolve().parent.parent / "web").resolve()
+            rel_path = path.lstrip("/")
+            if not rel_path:
+                target_file = web_dir / "index.html"
+            elif rel_path == "audit":
+                target_file = web_dir / "audit" / "index.html"
+            else:
+                target_file = (web_dir / rel_path).resolve()
+
+            if target_file.is_file() and target_file.is_relative_to(web_dir):
+                content_type = "text/plain"
+                if target_file.suffix == ".html":
+                    content_type = "text/html; charset=utf-8"
+                elif target_file.suffix == ".css":
+                    content_type = "text/css; charset=utf-8"
+                elif target_file.suffix == ".js":
+                    content_type = "application/javascript; charset=utf-8"
+                elif target_file.suffix == ".json":
+                    content_type = "application/json"
+                elif target_file.suffix in (".jpg", ".jpeg"):
+                    content_type = "image/jpeg"
+                elif target_file.suffix == ".png":
+                    content_type = "image/png"
+                elif target_file.suffix == ".svg":
+                    content_type = "image/svg+xml"
+
+                try:
+                    data = target_file.read_bytes()
+                    self.send_response(200)
+                    self.send_header("Content-Type", content_type)
+                    for k, v in cors_headers.items():
+                        self.send_header(k, v)
+                    self.send_header("Content-Length", str(len(data)))
+                    self.end_headers()
+                    if not is_head:
+                        self.wfile.write(data)
+                    return
+                except OSError:
+                    pass
+
             self._send_error(404, "Not Found", cors_headers)
 
         def do_POST(self):
