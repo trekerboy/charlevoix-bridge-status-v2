@@ -7,6 +7,7 @@ dedicated NVIDIA Spark host (spark-2079).
 """
 import os
 from pathlib import Path
+from typing import Optional
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import FileResponse, JSONResponse
 import httpx
@@ -17,47 +18,60 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 STATS_ORIGIN = os.getenv("STATS_ORIGIN", "http://127.0.0.1:8090").rstrip("/")
 
 
-@app.get("/")
+def find_file(*relative_candidates: str) -> Optional[Path]:
+    for rel in relative_candidates:
+        p1 = ROOT_DIR / rel
+        if p1.is_file():
+            return p1
+        p2 = ROOT_DIR / "web" / rel
+        if p2.is_file():
+            return p2
+    return None
+
+
+@app.api_route("/", methods=["GET", "HEAD"])
 async def root():
-    index_path = ROOT_DIR / "index.html"
-    if index_path.is_file():
-        return FileResponse(index_path, media_type="text/html")
+    path = find_file("index.html")
+    if path:
+        return FileResponse(path, media_type="text/html")
     return JSONResponse({"status": "ok", "service": "charlevoix-bridge-status-v2"})
 
 
-@app.get("/audit")
+@app.api_route("/audit", methods=["GET", "HEAD"])
+@app.api_route("/audit/", methods=["GET", "HEAD"])
+@app.api_route("/audit/index.html", methods=["GET", "HEAD"])
 async def audit_page():
-    audit_path = ROOT_DIR / "audit" / "index.html"
-    if audit_path.is_file():
-        return FileResponse(audit_path, media_type="text/html")
+    path = find_file("audit/index.html")
+    if path:
+        return FileResponse(path, media_type="text/html")
     return JSONResponse({"error": "Audit page not found"}, status_code=404)
 
 
-@app.get("/styles.css")
+@app.api_route("/styles.css", methods=["GET", "HEAD"])
 async def styles():
-    css_path = ROOT_DIR / "styles.css"
-    if css_path.is_file():
-        return FileResponse(css_path, media_type="text/css")
+    path = find_file("styles.css")
+    if path:
+        return FileResponse(path, media_type="text/css")
     return Response(status_code=404)
 
 
-@app.get("/app.js")
+@app.api_route("/app.js", methods=["GET", "HEAD"])
 async def main_js():
-    js_path = ROOT_DIR / "app.js"
-    if js_path.is_file():
-        return FileResponse(js_path, media_type="application/javascript")
+    path = find_file("app.js")
+    if path:
+        return FileResponse(path, media_type="application/javascript")
     return Response(status_code=404)
 
 
-@app.get("/audit/audit.js")
+@app.api_route("/audit/audit.js", methods=["GET", "HEAD"])
 async def audit_js():
-    js_path = ROOT_DIR / "audit" / "audit.js"
-    if js_path.is_file():
-        return FileResponse(js_path, media_type="application/javascript")
+    path = find_file("audit/audit.js")
+    if path:
+        return FileResponse(path, media_type="application/javascript")
     return Response(status_code=404)
 
 
-@app.get("/api/stats")
+@app.api_route("/api/stats", methods=["GET", "HEAD"])
 async def proxy_stats(request: Request):
     query_str = request.url.query
     target_url = f"{STATS_ORIGIN}/stats"
@@ -81,7 +95,7 @@ async def proxy_stats(request: Request):
         )
 
 
-@app.get("/api/live")
+@app.api_route("/api/live", methods=["GET", "HEAD"])
 async def proxy_live():
     target_url = f"{STATS_ORIGIN}/live.jpg"
     try:
@@ -101,7 +115,7 @@ async def proxy_live():
         )
 
 
-@app.api_route("/api/captures", methods=["GET", "POST"])
+@app.api_route("/api/captures", methods=["GET", "POST", "HEAD"])
 async def proxy_captures(request: Request):
     action = request.query_params.get("action")
     target = "/captures"
