@@ -1,12 +1,12 @@
 import unittest
-from app.config import SpatialZones
-from app.vision import (
+from engine.config import SpatialZones
+from engine.vision import (
     Detection,
     ByteTrack,
     SpatialClassifier,
     InfrastructureStateEstimator,
 )
-from app.vision.tracker import compute_iou
+from engine.vision.tracker import compute_iou
 
 class TestVisionPipeline(unittest.TestCase):
     def test_compute_iou(self):

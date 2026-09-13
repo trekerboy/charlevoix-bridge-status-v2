@@ -1,0 +1,9 @@
+engine/
+deploy/
+tests/
+tools/
+docs/
+.venv/
+data/
+*.py
+requirements.txt

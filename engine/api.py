@@ -535,16 +535,18 @@ def make_request_handler(daemon: APIDaemon):
                 return
 
             # 4. Static web assets fallback
-            web_dir = (Path(__file__).resolve().parent.parent / "web").resolve()
+            root_dir = Path(__file__).resolve().parent.parent
             rel_path = path.lstrip("/")
             if not rel_path:
-                target_file = web_dir / "index.html"
+                target_file = (root_dir / "web" / "index.html") if (root_dir / "web" / "index.html").is_file() else (root_dir / "index.html")
             elif rel_path == "audit":
-                target_file = web_dir / "audit" / "index.html"
+                target_file = (root_dir / "web" / "audit" / "index.html") if (root_dir / "web" / "audit" / "index.html").is_file() else (root_dir / "audit" / "index.html")
             else:
-                target_file = (web_dir / rel_path).resolve()
+                target_file = (root_dir / "web" / rel_path).resolve()
+                if not target_file.is_file():
+                    target_file = (root_dir / rel_path).resolve()
 
-            if target_file.is_file() and target_file.is_relative_to(web_dir):
+            if target_file.is_file() and target_file.is_relative_to(root_dir):
                 content_type = "text/plain"
                 if target_file.suffix == ".html":
                     content_type = "text/html; charset=utf-8"

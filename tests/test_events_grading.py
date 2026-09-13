@@ -1,7 +1,7 @@
 import datetime as dt
 import unittest
-from app.config import LOCAL_TZ
-from app.events import calculate_performance_grade, calculate_schedule_offset, get_regime
+from engine.config import LOCAL_TZ
+from engine.events import calculate_performance_grade, calculate_schedule_offset, get_regime
 
 class TestEventsGrading(unittest.TestCase):
     def test_regime_classification(self):

@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/home/jason/bridgecam-next/current
-ExecStart=/home/jason/bridgecam-next/venv/bin/python -m app.main --mode api --port 8090
+ExecStart=/home/jason/bridgecam-next/venv/bin/python -m engine.main --mode api --port 8090
 Restart=always
 RestartSec=3s
 EnvironmentFile=-/home/jason/bridgecam-next/config/bridgecam.env

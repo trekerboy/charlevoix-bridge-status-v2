@@ -82,7 +82,7 @@ pip install -r requirements.txt
 python3 -m unittest discover -s tests -v
 
 # Run local mock engine and API
-python3 -m app.main --mock --port 8090
+python3 -m engine.main --mock --port 8090
 ```
 
 ---

@@ -1,6 +1,6 @@
 import unittest
-from app.config import Config
-from app.ingestion import MockStreamReader, AuthenticationError
+from engine.config import Config
+from engine.ingestion import MockStreamReader, AuthenticationError
 
 class TestIngestion(unittest.TestCase):
     def test_mock_stream_reader(self):

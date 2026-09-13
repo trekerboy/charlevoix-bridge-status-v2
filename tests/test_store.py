@@ -1,7 +1,7 @@
 import tempfile
 import unittest
 from pathlib import Path
-from app.store import Store
+from engine.store import Store
 
 class TestStore(unittest.TestCase):
     def setUp(self):

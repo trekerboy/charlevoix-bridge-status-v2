@@ -1,5 +1,5 @@
 import unittest
-from app.state_machine import BridgeStateMachine
+from engine.state_machine import BridgeStateMachine
 
 class TestStateMachine(unittest.TestCase):
     def test_milestone_transitions(self):

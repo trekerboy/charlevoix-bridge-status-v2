@@ -1,8 +1,8 @@
 import tempfile
 import unittest
 from pathlib import Path
-from app.capture import CycleCaptureBuffer
-from app.config import Config
+from engine.capture import CycleCaptureBuffer
+from engine.config import Config
 
 class TestCaptureBuffer(unittest.TestCase):
     def setUp(self):

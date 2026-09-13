@@ -1,8 +1,8 @@
 import tempfile
 import unittest
 from pathlib import Path
-from app.api import APIDaemon
-from app.config import Config
+from engine.api import APIDaemon
+from engine.config import Config
 
 class TestAPIEndpoints(unittest.TestCase):
     def setUp(self):
