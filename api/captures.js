@@ -26,7 +26,9 @@ export default async function handler(req, res) {
       fetchOptions.cache = 'no-store';
     }
 
-    const response = await fetch(new URL(targetPath, origin), fetchOptions);
+    const baseUrl = origin.endsWith('/') ? origin : `${origin}/`;
+    const cleanTarget = targetPath.startsWith('/') ? targetPath.slice(1) : targetPath;
+    const response = await fetch(new URL(cleanTarget, baseUrl), fetchOptions);
     if (!response.ok) {
       return res.status(response.status).json({ error: 'Capture resource unavailable' });
     }

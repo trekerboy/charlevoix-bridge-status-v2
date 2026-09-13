@@ -2,7 +2,8 @@ export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
   try {
     const origin = process.env.STATS_ORIGIN || 'http://127.0.0.1:8090';
-    const response = await fetch(new URL('/live.jpg', origin), {
+    const baseUrl = origin.endsWith('/') ? origin : `${origin}/`;
+    const response = await fetch(new URL('live.jpg', baseUrl), {
       cache: 'no-store',
       signal: AbortSignal.timeout(4000),
     });

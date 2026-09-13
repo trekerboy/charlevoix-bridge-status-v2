@@ -15,19 +15,20 @@ Target environment: Dedicated **NVIDIA Spark** compute appliance (`spark-2079`, 
 
 | Directory / File | Responsibility |
 |---|---|
-| `app/config.py` | Typed system configuration, credential masking, spatial zone calibration |
-| `app/ingestion.py` | Resilient HTTP Digest MJPEG stream client with exponential backoff & 401 halt |
-| `app/store.py` | SQLite WAL mode store, schema initialization, indexed analytical queries |
-| `app/vision/detector.py` | GPU deep learning detector (YOLO/RT-DETR on CUDA 13.1 / TensorRT with CPU fallback) |
-| `app/vision/tracker.py` | ByteTrack multi-object tracker (IoU matching + Kalman filter tracking) |
-| `app/vision/classifier.py` | Spatial zone mapping (US-31 NB/SB, sidewalks, channel In/Out, seawall rejection) |
-| `app/vision/state_estimator.py` | Infrastructure state estimation (barrier gates and bascule leaf elevation angle) |
-| `app/state_machine.py` | Debounced milestone derivation ($t_{\text{blocked}} \dots t_{\text{resume}}$), queue wait, closure time |
-| `app/events.py` | 33 CFR § 117.641 regulatory regime classification & A+ to F performance grading rubric |
-| `app/capture.py` | Rolling 120s ring buffer, full 720p opening cycle exporter, FIFO disk retention |
-| `app/engine.py` | Unified 10–12 FPS vision loop, atomic `live.jpg` writer, store persistence |
-| `app/api.py` | Fast API daemon on port 8090 (`/stats`, `/live`, `/captures`, `/audit`, `/recognize`) |
-| `app/main.py` | Unified CLI entrypoint (`--mode engine`, `--mode api`, `--mode all`, `--mock`) |
+| `engine/config.py` | Typed system configuration, credential masking, spatial zone calibration |
+| `engine/requirements.txt` | Python runtime dependencies (Pillow, NumPy, Requests, Ultralytics) |
+| `engine/ingestion.py` | Resilient HTTP Digest MJPEG stream client with exponential backoff & 401 halt |
+| `engine/store.py` | SQLite WAL mode store, schema initialization, indexed analytical queries |
+| `engine/vision/detector.py` | GPU deep learning detector (YOLO/RT-DETR on CUDA 13.1 / TensorRT with CPU fallback) |
+| `engine/vision/tracker.py` | ByteTrack multi-object tracker (IoU matching + Kalman filter tracking) |
+| `engine/vision/classifier.py` | Spatial zone mapping (US-31 NB/SB, sidewalks, channel In/Out, seawall rejection) |
+| `engine/vision/state_estimator.py` | Infrastructure state estimation (barrier gates and bascule leaf elevation angle) |
+| `engine/state_machine.py` | Debounced milestone derivation ($t_{\text{blocked}} \dots t_{\text{resume}}$), queue wait, closure time |
+| `engine/events.py` | 33 CFR § 117.641 regulatory regime classification & A+ to F performance grading rubric |
+| `engine/capture.py` | Rolling 120s ring buffer, full 720p opening cycle exporter, FIFO disk retention |
+| `engine/engine.py` | Unified 10–12 FPS vision loop, atomic `live.jpg` writer, store persistence |
+| `engine/api.py` | Fast API daemon on port 8090 (`/stats`, `/live`, `/captures`, `/audit`, `/recognize`) |
+| `engine/main.py` | Unified CLI entrypoint (`--mode engine`, `--mode api`, `--mode all`, `--mock`) |
 | `web/` | Modern Vercel frontend: live dashboard, 33-slot schedule grid, 24-hr traffic charts |
 | `web/audit/` | Web Event Auditor: visual scrubber, milestone certifier, hotkey R Recognition HUD |
 | `web/api/` | Vercel edge proxy routes (`stats.js`, `live.js`, `captures.js`) with edge CDN caching |

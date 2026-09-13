@@ -76,7 +76,7 @@ Vercel Edge Platform / iOS Client
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r engine/requirements.txt
 
 # Run unit and benchmark tests
 python3 -m unittest discover -s tests -v

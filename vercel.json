@@ -1,4 +1,6 @@
 {
+  "framework": null,
+  "cleanUrls": true,
   "headers": [
     {
       "source": "/(.*)",

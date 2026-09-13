@@ -4,7 +4,9 @@ export default async function handler(req, res) {
     const origin = process.env.STATS_ORIGIN || 'http://127.0.0.1:8090';
     const { date } = req.query;
     const target = date ? `/stats?date=${encodeURIComponent(date)}` : '/stats';
-    const response = await fetch(new URL(target, origin), {
+    const baseUrl = origin.endsWith('/') ? origin : `${origin}/`;
+    const cleanTarget = target.startsWith('/') ? target.slice(1) : target;
+    const response = await fetch(new URL(cleanTarget, baseUrl), {
       cache: 'no-store',
       signal: AbortSignal.timeout(5000),
     });
