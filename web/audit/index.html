@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charlevoix Bridge — Visual Event Auditor & Ground Truth</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .auditor-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    @media (min-width: 960px) {
+      .auditor-layout {
+        grid-template-columns: 2fr 1fr;
+      }
+    }
+    .canvas-box {
+      position: relative;
+      width: 100%;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+    }
+    canvas {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .scrubber-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .scrubber-slider {
+      flex: 1;
+      accent-color: var(--accent-blue);
+      cursor: pointer;
+    }
+    .milestone-btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      margin-bottom: 0.4rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      font-size: 0.8rem;
+    }
+    .milestone-btn.set {
+      border-color: var(--accent-green);
+      background: rgba(16, 185, 129, 0.1);
+    }
+    .milestone-ts {
+      font-family: var(--font-mono);
+      color: var(--accent-blue);
+    }
+    .hud-card {
+      background: var(--bg-card);
+      border: 1px solid var(--accent-purple);
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <h1>Charlevoix Event Auditor</h1>
+        <span class="live-pill" style="color:var(--accent-purple); border-color:var(--accent-purple); background:rgba(168,85,247,0.15)">Ground Truth Certification</span>
+      </div>
+      <div>
+        <select id="captureSelect"><option value="">Loading recorded openings...</option></select>
+        <button id="recognizeBtn" style="color:var(--accent-purple); font-weight:700" title="Shortcut: R">⚡ Recognize (R)</button>
+        <button id="saveAuditBtn" style="color:var(--accent-green); font-weight:700">💾 Certify & Save</button>
+        <button id="exportGoldenBtn">⬇ Export Golden</button>
+        <a href="/" style="color:var(--accent-blue); text-decoration:none; font-size:0.875rem; margin-left:0.5rem">← Dashboard</a>
+      </div>
+    </header>
+
+    <div class="auditor-layout">
+      <!-- Main Video Canvas & Scrubber -->
+      <div>
+        <div class="canvas-box" id="canvasWrapper">
+          <canvas id="auditCanvas" width="1280" height="720"></canvas>
+        </div>
+
+        <div class="scrubber-controls">
+          <button id="playBtn">▶ Play</button>
+          <button id="prevFrameBtn">◀ -1</button>
+          <input type="range" id="frameSlider" min="0" max="0" value="0" class="scrubber-slider">
+          <button id="nextFrameBtn">+1 ▶</button>
+          <span id="frameCounter" style="font-family:var(--font-mono); font-size:0.8rem">0 / 0</span>
+          <span id="frameTs" style="font-family:var(--font-mono); font-size:0.8rem; color:var(--accent-blue)">--:--:--</span>
+        </div>
+
+        <!-- Single-Frame Recognition HUD Inspector -->
+        <div class="hud-card" id="hudCard" style="display:none">
+          <div style="font-weight:700; color:var(--accent-purple); margin-bottom:0.5rem">
+            ⚡ GPU Recognition Telemetry (<span id="hudLatency">--</span>)
+          </div>
+          <div id="hudBody"></div>
+        </div>
+      </div>
+
+      <!-- Ground Truth Certification Controls -->
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Milestones (33 CFR § 117.641)</span>
+            <span id="saveStatus" style="font-size:0.75rem; color:var(--text-dim)">Ready</span>
+          </div>
+
+          <button class="milestone-btn" data-milestone="road_blocked">
+            <span>1. Gates Lowered (Road Blocked)</span>
+            <span class="milestone-ts" id="ms_road_blocked">--</span>
+          </button>
+          <button class="milestone-btn" data-milestone="lift_start">
+            <span>2. Leaf Lift Start</span>
+            <span class="milestone-ts" id="ms_lift_start">--</span>
+          </button>
+          <button class="milestone-btn" data-milestone="full_open">
+            <span>3. Peak Elevation (Full Open)</span>
+            <span class="milestone-ts" id="ms_full_open">--</span>
+          </button>
+          <button class="milestone-btn" data-milestone="lower_start">
+            <span>4. Leaf Descent Start</span>
+            <span class="milestone-ts" id="ms_lower_start">--</span>
+          </button>
+          <button class="milestone-btn" data-milestone="seated">
+            <span>5. Bridge Seated & Locked</span>
+            <span class="milestone-ts" id="ms_seated">--</span>
+          </button>
+          <button class="milestone-btn" data-milestone="road_clear">
+            <span>6. Gates Upright (Road Clear)</span>
+            <span class="milestone-ts" id="ms_road_clear">--</span>
+          </button>
+          <button class="milestone-btn" data-milestone="traffic_resumed">
+            <span>7. Traffic Resumed (1st Vehicle)</span>
+            <span class="milestone-ts" id="ms_traffic_resumed">--</span>
+          </button>
+
+          <!-- Vessel Tallies -->
+          <div style="margin-top:1rem; border-top:1px solid var(--border-subtle); padding-top:0.75rem">
+            <div class="card-title" style="margin-bottom:0.5rem">Marine Vessels Observed</div>
+            <div style="display:flex; gap:0.5rem">
+              <label style="flex:1; font-size:0.8rem">
+                Inbound (Round Lk):
+                <input type="number" id="boatsInInput" min="0" value="0" style="width:100%; margin-top:0.25rem">
+              </label>
+              <label style="flex:1; font-size:0.8rem">
+                Outbound (Lk MI):
+                <input type="number" id="boatsOutInput" min="0" value="0" style="width:100%; margin-top:0.25rem">
+              </label>
+            </div>
+          </div>
+
+          <!-- Notes -->
+          <div style="margin-top:0.75rem">
+            <label style="font-size:0.8rem">
+              Reviewer Notes:
+              <textarea id="notesInput" rows="3" style="width:100%; margin-top:0.25rem; font-family:inherit; font-size:0.8rem; background:var(--bg-card); color:var(--text-main); border:1px solid var(--border-subtle); border-radius:6px; padding:0.5rem"></textarea>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/audit/audit.js"></script>
+</body>
+</html>

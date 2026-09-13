@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260911-160056Z",
+  "milestones": {
+    "road_blocked": 1789142431.454,
+    "lift_start": 1789142461.423,
+    "full_open": 1789142521.539,
+    "lower_start": 1789142696.467,
+    "seated": 1789142776.443,
+    "road_clear": 1789142791.504,
+    "traffic_resumed": 1789142801.499
+  },
+  "peak_openness_percent": 100,
+  "boats": {
+    "inbound": 1,
+    "outbound": 3
+  },
+  "conditions": {
+    "environment": "daylight_clear"
+  },
+  "reviewer_notes": "Audit of opening starting at 12:00:56.",
+  "certified_at": "2026-09-11T18:00:08.214Z"
+}

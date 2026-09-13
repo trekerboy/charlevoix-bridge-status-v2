@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260911-180026Z",
+  "milestones": {
+    "road_blocked": 1789149596.521,
+    "lift_start": 1789149626.524,
+    "full_open": 1789149676.564,
+    "lower_start": 1789149681.51,
+    "seated": 1789149731.517,
+    "road_clear": 1789149746.57,
+    "traffic_resumed": 1789149746.57
+  },
+  "peak_openness_percent": 50,
+  "boats": {
+    "inbound": 1,
+    "outbound": 0
+  },
+  "conditions": {
+    "environment": "daylight_clear"
+  },
+  "reviewer_notes": "Audit of opening starting at 14:00:26. Single inbound vessel with proportional clearance partial lift (~50% openness, ~45 deg bascule angle). Swift 105s lift-to-seat, road closed 150s.",
+  "certified_at": "2026-09-11T18:14:15.311Z"
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260911-210051Z",
+  "milestones": {
+    "road_blocked": null,
+    "lift_start": 1789160451.0388777,
+    "full_open": 1789160491.0338998,
+    "lower_start": 1789160551.0502794,
+    "seated": 1789160591.040173,
+    "road_clear": null,
+    "traffic_resumed": null
+  },
+  "peak_openness_percent": 99,
+  "boats": {
+    "inbound": 1,
+    "outbound": 0
+  },
+  "conditions": {
+    "environment": "daylight_clear"
+  },
+  "reviewer_notes": "Audit of 5:00 PM opening (17:00:51 EDT). Single inbound catamaran sailing through Pine River channel into Round Lake.",
+  "certified_at": "2026-09-11T22:58:04.619Z"
+}

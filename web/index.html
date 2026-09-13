@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charlevoix Memorial Bridge — Real-Time Vision & Analytics</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌉</text></svg>">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <h1>Charlevoix Memorial Bridge</h1>
+        <span id="livePill" class="live-pill">Live Telemetry</span>
+      </div>
+      <div class="date-nav">
+        <button id="prevDateBtn" title="Previous Day">◀</button>
+        <select id="dateSelect"></select>
+        <button id="nextDateBtn" title="Next Day">▶</button>
+        <button id="liveNowBtn" style="display:none; font-weight:700; color:var(--accent-green)">Live Now</button>
+        <a href="/audit" style="color:var(--accent-blue); text-decoration:none; font-size:0.875rem; margin-left:0.5rem">Auditor UI ↗</a>
+      </div>
+    </header>
+
+    <div class="grid-main">
+      <!-- Live Video Feed -->
+      <section class="card">
+        <div class="card-header">
+          <span class="card-title">Live Camera Stream</span>
+          <div style="display:flex; gap:0.5rem">
+            <button id="fullscreenBtn" title="Fullscreen">⛶</button>
+          </div>
+        </div>
+        <div class="video-wrapper" id="videoContainer">
+          <img id="liveImg" src="/api/live" alt="Live Charlevoix Bridge Camera Feed">
+          <div class="video-overlay">
+            <span class="video-badge" id="videoLatency">Native 720p · &lt;1s Latency</span>
+            <span class="video-badge" id="videoTime">--:--:--</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Status Banner -->
+      <section class="card status-display">
+        <div class="card-header">
+          <span class="card-title">Physical Bridge Status</span>
+          <span id="readingFreshness" style="font-size:0.75rem; color:var(--text-dim)">Fresh</span>
+        </div>
+        <div id="stateBanner" class="state-badge-lg state-closed">
+          CLOSED / SEATED
+        </div>
+        <div class="metric-strip">
+          <div class="metric-box">
+            <div class="metric-val" id="leafAngleVal">0°</div>
+            <div class="metric-lbl">Leaf Bascule Angle</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-val" id="leafOpenVal">0%</div>
+            <div class="metric-lbl">Geometric Elevation</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-val" id="gateStateVal">RAISED</div>
+            <div class="metric-lbl">Barricade Gates</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-val" id="stateDurationVal">--</div>
+            <div class="metric-lbl">Current State Dwell</div>
+          </div>
+        </div>
+
+        <!-- Crossing Metrics -->
+        <div class="metric-strip" style="margin-top:0.5rem">
+          <div class="metric-box">
+            <div class="metric-val" id="vehTodayVal">0</div>
+            <div class="metric-lbl">Vehicles Today (US-31)</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-val" id="boatTodayVal">0</div>
+            <div class="metric-lbl">Vessels Today (Channel)</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-val" id="pedTodayVal">0</div>
+            <div class="metric-lbl">Pedestrians Today</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-val" id="bikeTodayVal">0</div>
+            <div class="metric-lbl">Bicycles Today</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 33-Slot Schedule Grid per 33 CFR § 117.641 -->
+    <section class="card" style="margin-bottom:1.5rem">
+      <div class="card-header">
+        <span class="card-title">Daytime Anticipated Opening Schedule (33 CFR § 117.641)</span>
+        <span style="font-size:0.75rem; color:var(--text-muted)">6:00 AM – 10:00 PM (:00 and :30 Slots)</span>
+      </div>
+      <div class="schedule-grid" id="scheduleGrid"></div>
+
+      <!-- Off-Schedule Section -->
+      <div id="offScheduleSection" style="display:none; margin-top:1.25rem; border-top:1px solid var(--border-subtle); padding-top:1rem">
+        <div style="font-size:0.85rem; font-weight:700; color:var(--accent-amber); margin-bottom:0.5rem">
+          ⚡ Off-Schedule / Commercial Vessels (Passed on Signal)
+        </div>
+        <div class="off-grid" id="offScheduleGrid"></div>
+      </div>
+    </section>
+
+    <!-- Selected Opening Details Modal / Drawer -->
+    <div id="openingDetailModal" style="display:none; margin-bottom:1.5rem" class="card">
+      <div class="card-header">
+        <span class="card-title" id="modalTitle">Opening Event Details</span>
+        <button id="closeModalBtn">✕</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+
+    <!-- 24-Hour Visual Analytics Charts -->
+    <section class="card">
+      <div class="card-header">
+        <span class="card-title">24-Hour Hourly Traffic Distribution</span>
+        <span style="font-size:0.75rem; color:var(--text-muted)">Vehicles (NB/SB), Pedestrians & Vessels</span>
+      </div>
+      <div class="chart-container" id="hourlyChartContainer"></div>
+    </section>
+
+    <footer>
+      Powered by NVIDIA GB10 Blackwell GPU on Spark Host · Deep Learning Vision Engine 24/7 · 33 CFR § 117.641 Regulatory Telemetry
+    </footer>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

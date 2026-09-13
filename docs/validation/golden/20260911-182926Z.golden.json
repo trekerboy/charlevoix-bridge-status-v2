@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260911-182926Z",
+  "milestones": {
+    "road_blocked": 1789151331.53,
+    "lift_start": 1789151366.576,
+    "full_open": 1789151431.582,
+    "lower_start": 1789151521.544,
+    "seated": 1789151596.585,
+    "road_clear": 1789151611.564,
+    "traffic_resumed": 1789151616.607
+  },
+  "peak_openness_percent": 100,
+  "boats": {
+    "inbound": 0,
+    "outbound": 3
+  },
+  "conditions": {
+    "environment": "daylight_clear"
+  },
+  "reviewer_notes": "Audit of opening starting at 14:29:26. Beaver Island ferry and 2 cruisers outbound; wake foam false positive cleared.",
+  "certified_at": "2026-09-11T18:55:25.171Z"
+}

@@ -1,0 +1,16 @@
+[Unit]
+Description=Charlevoix Memorial Bridge Unified Vision Engine (Next-Gen)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/jason/bridgecam-next/current
+ExecStart=/home/jason/bridgecam-next/venv/bin/python -m app.main --mode engine
+Restart=always
+RestartSec=5s
+EnvironmentFile=-/home/jason/bridgecam-next/config/bridgecam.env
+Environment=PYTHONUNBUFFERED=1
+LimitNOFILE=65536
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,15 @@
+[Unit]
+Description=Charlevoix Memorial Bridge Fast API Daemon (Port 8090)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/jason/bridgecam-next/current
+ExecStart=/home/jason/bridgecam-next/venv/bin/python -m app.main --mode api --port 8090
+Restart=always
+RestartSec=3s
+EnvironmentFile=-/home/jason/bridgecam-next/config/bridgecam.env
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

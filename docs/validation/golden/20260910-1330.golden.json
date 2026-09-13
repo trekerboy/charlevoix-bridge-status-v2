@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "event_id": "20260910-1330",
+  "source_directory": ".local/opening-review/20260910-1330",
+  "start_ts": 1789061518.0,
+  "end_ts": 1789061954.0,
+  "frames_count": 88,
+  "milestones": {
+    "road_blocked": null,
+    "lift_start": null,
+    "full_open": null,
+    "lower_start": 1789061518.0,
+    "seated": 1789061614.0,
+    "road_clear": 1789061629.0,
+    "traffic_resumed": 1789061639.0
+  },
+  "peak_openness_percent": 100,
+  "boats": {
+    "inbound": 0,
+    "outbound": 0
+  },
+  "conditions": {
+    "environment": "daylight_clear"
+  },
+  "reviewer_notes": "Holding audit of 88 frames. Bridge seated at 13:33:34, gates upright at 13:33:49, first vehicle entered span at 13:33:59.",
+  "certified_at": "2026-09-10T21:30:00Z"
+}
