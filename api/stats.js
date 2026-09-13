@@ -1,5 +1,9 @@
 export default async function handler(req, res) {
-  if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== 'GET' && req.method !== 'HEAD') return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method === 'HEAD') {
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(200).end();
+  }
   try {
     const origin = process.env.STATS_ORIGIN || 'http://127.0.0.1:8090';
     const { date } = req.query;
