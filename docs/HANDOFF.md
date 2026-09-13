@@ -32,6 +32,7 @@ Target environment: Dedicated **NVIDIA Spark** compute appliance (`spark-2079`, 
 | `web/` | Modern Vercel frontend: live dashboard, 33-slot schedule grid, 24-hr traffic charts |
 | `web/audit/` | Web Event Auditor: visual scrubber, milestone certifier, hotkey R Recognition HUD |
 | `web/api/` | Vercel edge proxy routes (`stats.js`, `live.js`, `captures.js`) with edge CDN caching |
+| `app/main.py` | Vercel Serverless FastAPI proxy & static asset dispatcher |
 | `tools/evaluate_openings.py`| Automated zero-regression golden benchmark evaluation harness |
 | `tools/sync_audits.py` | Certified audit discovery and `.golden.json` exporter |
 | `docs/validation/golden/` | Certified human ground-truth benchmark datasets |

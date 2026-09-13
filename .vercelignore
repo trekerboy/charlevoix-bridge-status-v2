@@ -5,5 +5,4 @@ tools/
 docs/
 .venv/
 data/
-*.py
 *.md
